@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { interval } from 'rxjs';
+import { fromEvent, interval } from 'rxjs';
 import { DataService } from '../data.service';
 
 @Component({
@@ -15,9 +15,11 @@ export class SlowRenderComponent implements OnInit {
   constructor(private dataService: DataService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    interval(300).subscribe(() => {
+    
+    interval(50).subscribe(() => {
       this.btn.nativeElement.click();
       this.elements.changes.subscribe(elements => {
+        fromEvent(document, 'mousemove').subscribe();
         elements.last.nativeElement.style.backgroundColor = 'red';
         elements.last.nativeElement.scrollIntoView();
     });
